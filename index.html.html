@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#f6b9d7">
+<title>Kitty's OS ♡</title>
+<style>
+:root{
+ --pink:#f7b8d6;--pink-deep:#df83b4;--pink-light:#ffe8f3;--pink-pale:#fff7fb;
+ --lav:#d9c9f4;--lav-deep:#a88bcf;--ink:#875477;--text:#8d6280;
+ --line:#e8aaca;--white:#fffafd;--shadow:0 5px 0 #d88eb5,0 12px 28px #9c5e8730;
+ --checker:linear-gradient(45deg,#f7c5df 25%,transparent 25%,transparent 75%,#f7c5df 75%),linear-gradient(45deg,#f7c5df 25%,transparent 25%,transparent 75%,#f7c5df 75%);
+}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;font-family:"Trebuchet MS",Verdana,sans-serif;color:var(--text)}
+body{background:#f9d7e8}
+button,input,textarea{font:inherit}
+button{cursor:pointer}
+.desktop{
+ min-height:100vh;position:relative;overflow:hidden;padding:16px 18px 76px;
+ background-color:#f9d9e9;
+ background-image:var(--checker);
+ background-size:28px 28px;background-position:0 0,14px 14px;
+}
+.desktop:before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at center,transparent 38%,#efafd080 100%)}
+.shell{position:relative;max-width:1450px;margin:0 auto;border:5px solid #fff4fa;border-radius:30px;background:#fff5fa;box-shadow:0 0 0 2px #cf8bb4,0 8px 0 #c77eaa,0 18px 40px #854b7430;padding:8px}
+.banner{
+ height:174px;border:3px solid #d88bb5;border-radius:22px 22px 7px 7px;overflow:hidden;position:relative;
+ background:
+ radial-gradient(circle at 82% 28%,#fff7 0 2px,transparent 3px),
+ radial-gradient(circle at 74% 70%,#fff9 0 2px,transparent 3px),
+ linear-gradient(120deg,#f8c4e0,#f4a8d0 48%,#d8c6f4);
+ background-size:31px 31px,47px 47px,auto;
+ display:flex;align-items:center;justify-content:center;text-align:center;
+}
+.banner:before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,#fff2 0 2px,transparent 2px 7px);opacity:.3}
+.banner:after{content:"♡ ✧ ♡ ✧ ♡";position:absolute;right:3%;bottom:14px;color:#fff;font-size:24px;letter-spacing:10px;text-shadow:1px 2px #cb83b0}
+.banner-art{position:absolute;left:3%;bottom:-19px;font-size:105px;filter:drop-shadow(0 4px 0 #c57fa6);transform:rotate(-8deg);opacity:.92}
+.banner-art.right{left:auto;right:8%;font-size:82px;bottom:-8px;transform:rotate(8deg)}
+.banner-title{z-index:1;font-size:clamp(38px,7vw,76px);font-weight:1000;letter-spacing:2px;color:white;-webkit-text-stroke:1.8px #df83b4;text-shadow:3px 4px 0 #bd6e9d,0 0 12px white}
+.banner-sub{position:absolute;z-index:2;bottom:15px;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:3px;color:#fff;text-shadow:1px 1px #bb75a0;white-space:nowrap}
+.header-strip{display:flex;justify-content:space-between;align-items:center;padding:9px 6px 11px;font-size:11px;color:#b2769d}
+.header-strip strong{letter-spacing:1.4px}
+.header-strip .status{background:#ffe5f1;border:1px solid #e8b3cf;border-radius:20px;padding:5px 10px}
+.desktop-grid{display:grid;grid-template-columns:220px minmax(300px,1fr) 220px;gap:10px;align-items:start}
+.column{display:grid;gap:10px;min-width:0}
+.panel{
+ border:2px solid #d990b9;border-radius:9px;background:#fff8fc;box-shadow:0 3px 0 #edc0d7;overflow:hidden;min-width:0
+}
+.panel-title,.win-title{
+ background:repeating-linear-gradient(90deg,#f9c8e0 0 12px,#f6b9d6 12px 24px);
+ border-bottom:2px solid #df9cbe;color:#fff;text-shadow:1px 1px #c47da5;
+ font-weight:900;font-size:12px;padding:7px 9px;display:flex;align-items:center;justify-content:space-between
+}
+.panel-title .dots{letter-spacing:2px}
+.panel-content{padding:11px}
+.nav-group{font-size:11px;font-weight:bold;color:#d17da9;background:#ffe9f3;padding:5px 7px;border-top:1px solid #f3c6dc}
+.nav-link{display:block;text-align:left;width:100%;padding:5px 8px 5px 18px;border:0;border-bottom:1px solid #f7dce9;background:#fffafd;color:#a46e91;font-size:11px;font-weight:bold}
+.nav-link:before{content:"› ";color:#d56d9f;font-size:17px;vertical-align:-1px}
+.nav-link:hover{background:#ffe3f0;color:#b64d85}
+.welcome{min-height:360px}
+.welcome-body{padding:14px;background-color:#fff9fc;background-image:linear-gradient(45deg,#fce2ee 25%,transparent 25%,transparent 75%,#fce2ee 75%),linear-gradient(45deg,#fce2ee 25%,transparent 25%,transparent 75%,#fce2ee 75%);background-size:18px 18px;background-position:0 0,9px 9px}
+.welcome-inner{background:#fffafd;border:2px solid #edc0d8;min-height:315px;padding:18px;text-align:center;position:relative}
+.welcome-ribbon{background:#f39bc5;color:#fff;border-radius:5px;padding:10px;font-size:clamp(14px,2vw,20px);font-weight:1000;text-shadow:1px 2px #cb77a5}
+.welcome-inner p{font-family:Georgia,serif;font-size:13px;line-height:1.75;max-width:650px;margin:20px auto;color:#a16d91}
+.welcome-mascot{font-size:68px;display:block;margin:12px auto 0;filter:drop-shadow(2px 3px #f3c3db)}
+.mini-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.mini-panel{min-height:130px}
+.stamp{display:inline-block;border:1px solid #e5a7c7;background:#fff0f7;padding:4px 7px;border-radius:4px;font-size:10px;color:#c276a1;margin:3px}
+.profile-card{text-align:center}
+.avatar{width:82px;height:82px;margin:2px auto 8px;border-radius:50%;border:3px solid white;outline:2px solid #e6a6c6;background:linear-gradient(145deg,#ffd4e8,#d8c8f4);display:grid;place-items:center;font-size:42px}
+.profile-card b{display:block;font-size:13px;color:#c06e9d}
+.profile-card small{font-size:10px}
+.update{display:flex;gap:8px;padding:8px 0;border-bottom:1px dashed #edc5da;font-size:11px;line-height:1.45}
+.update:last-child{border:0}
+.update .ico{font-size:16px}
+.update b{color:#c06f9c}
+.badges{display:flex;gap:5px;flex-wrap:wrap;justify-content:center}
+.badges span{font-size:9px;padding:4px 6px;border:1px solid #efc4da;background:#fff0f7;border-radius:4px}
+.window{
+ position:fixed;z-index:20;left:50%;top:50%;transform:translate(-50%,-50%);
+ width:min(700px,calc(100vw - 30px));max-height:min(78vh,720px);display:none;flex-direction:column;
+ border:3px solid #d98bb7;border-radius:10px;background:#fff8fc;box-shadow:0 4px 0 #c77ea7,0 16px 50px #75405b55;overflow:hidden
+}
+.window.open{display:flex;animation:pop .15s ease-out}
+@keyframes pop{from{opacity:0;scale:.97}to{opacity:1;scale:1}}
+.window.max{width:calc(100vw - 34px);height:calc(100vh - 100px);max-height:none;left:17px!important;top:12px!important;transform:none!important}
+.win-title{height:36px;flex-shrink:0;cursor:grab;user-select:none}
+.win-title:active{cursor:grabbing}
+.win-controls{display:flex;gap:4px}
+.win-controls button{width:19px;height:18px;border:1px solid #d88fb6;background:#fff1f8;color:#b86d98;border-radius:3px;font-weight:bold;line-height:1}
+.win-controls .x{background:#ef9ec2;color:white}
+.win-body{padding:16px;overflow:auto;font-size:13px;line-height:1.6}
+.win-body h2{color:#c36f9e;margin:0 0 8px;font-size:22px}
+.win-body h3{color:#b36b94;font-size:14px}
+.win-body p{margin:8px 0}
+.app-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+.app-card{background:#fff0f7;border:1px solid #edc1d8;border-radius:7px;padding:12px}
+.app-card strong{display:block;color:#bd6e9a}
+.app-card small{color:#a47b94}
+.ui-btn{border:1px solid #d88fb6;background:linear-gradient(#fff,#ffe7f2);color:#ad608c;border-radius:5px;padding:7px 11px;font-size:11px;font-weight:bold;box-shadow:0 2px 0 #e9bdd4}
+.ui-btn:hover{filter:brightness(.98);transform:translateY(-1px)}
+.ui-btn.primary{background:#ee9fc4;color:white;border-color:#d77ba8}
+input,textarea{width:100%;border:1px solid #e4b4ce;background:#fffafd;padding:9px;color:#875477;border-radius:5px;outline:none}
+textarea{min-height:140px;resize:vertical}
+.taskbar{position:fixed;bottom:0;left:0;right:0;height:55px;background:#ffeaf4ed;backdrop-filter:blur(12px);border-top:2px solid #e2a7c6;z-index:100;display:flex;align-items:center;gap:8px;padding:0 12px;box-shadow:0 -3px 15px #a85c8420}
+.start{height:37px;padding:0 13px;background:linear-gradient(#fff,#f9c8e0);border:2px solid #df9cbe;border-radius:7px;color:#b55d8f;font-weight:1000;box-shadow:0 2px 0 #d58caf}
+.taskapps{display:flex;gap:5px;flex:1;overflow:auto}
+.taskapp{border:1px solid #edc4d9;background:#fff6fa;border-radius:5px;padding:6px 9px;color:#a7678e;font-size:11px;white-space:nowrap}
+.taskapp.active{background:#f6c1db;border-color:#d985b0}
+.task-right{font-size:10px;color:#a16b90;white-space:nowrap;text-align:right}
+.startmenu,.quickmenu{position:fixed;z-index:110;bottom:63px;background:#fff7fb;border:2px solid #d88fb6;border-radius:9px;box-shadow:var(--shadow);padding:12px;display:none}
+.startmenu{left:12px;width:270px}.quickmenu{right:12px;width:220px}
+.startmenu.show,.quickmenu.show{display:block}
+.startmenu h3{margin:0 0 8px;color:#c16f9c}
+.launch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:5px}
+.launch-grid button{border:1px solid #f0c9dc;background:#fff0f7;border-radius:6px;padding:9px 3px;color:#a5658a;font-size:10px}
+.launch-grid span{display:block;font-size:22px;margin-bottom:3px}
+.toast{position:fixed;z-index:200;bottom:66px;left:50%;transform:translate(-50%,12px);opacity:0;pointer-events:none;background:#9c5e82;color:white;padding:9px 14px;border-radius:6px;font-size:11px;transition:.2s}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+footer{text-align:center;font-size:10px;color:#b77a9e;padding:13px 5px 3px}
+.hidden{display:none!important}
+@media(max-width:900px){.desktop-grid{grid-template-columns:185px minmax(280px,1fr)}.rightcol{grid-column:1/-1;grid-template-columns:repeat(2,1fr)}.banner-art{font-size:75px}.banner-art.right{font-size:65px}}
+@media(max-width:620px){
+ .desktop{padding:7px 6px 70px}.shell{padding:5px;border-width:3px;border-radius:17px}.banner{height:125px;border-radius:12px}.banner-art{font-size:52px;left:1%;bottom:-10px}.banner-art.right{font-size:48px;right:2%;bottom:-4px}
+ .banner-title{font-size:clamp(32px,10vw,52px);letter-spacing:0}.banner-sub{font-size:8px;letter-spacing:1px;bottom:8px}
+ .header-strip{font-size:9px}.desktop-grid{grid-template-columns:1fr}.leftcol{grid-template-columns:repeat(2,1fr)}.rightcol{grid-column:auto;grid-template-columns:repeat(2,1fr)}
+ .welcome{min-height:0}.welcome-inner{min-height:260px;padding:12px}.welcome-inner p{font-size:12px;margin:13px auto}.welcome-body{padding:8px}
+ .window{width:calc(100vw - 18px);max-height:80vh}.window.max{left:5px!important;top:5px!important;width:calc(100vw - 10px);height:calc(100vh - 72px)}
+ .taskbar{height:52px;padding:0 6px;gap:5px}.task-right{font-size:9px}.taskapp{padding:6px}.app-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="desktop">
+ <div class="shell">
+  <header class="banner">
+   <div class="banner-art">🎀</div><div class="banner-art right">🐰</div>
+   <div class="banner-title">Varnicka's<br class="mobile-break"> World!</div>
+   <div class="banner-sub">♡ A TINY INTERNET HOME · EST. 2026 ♡</div>
+  </header>
+  <div class="header-strip"><strong>✿ KITTY'S OS ✿</strong><span class="status">● ONLINE & LOOKING CUTE</span><span id="dateLine">LOADING...</span></div>
+  <div class="desktop-grid">
+   <aside class="column leftcol">
+    <section class="panel"><div class="panel-title"><span>♡ Navigation</span><span class="dots">− □ ×</span></div>
+     <div class="nav-group">Personal</div>
+     <button class="nav-link" data-app="about">About Varnicka</button><button class="nav-link" data-app="moodboard">Moodboard</button>
+     <div class="nav-group">Creations</div>
+     <button class="nav-link" data-app="gallery">Gallery</button><button class="nav-link" data-app="lore">The Lore</button><button class="nav-link" data-app="awards">Achievements</button>
+     <div class="nav-group">For Fun</div><button class="nav-link" data-app="guestbook">Guestbook</button>
+     <div class="nav-group">Computer</div>
+     <button class="nav-link" data-app="notepad">Notepad</button><button class="nav-link" data-app="settings">Settings</button>
+    </section>
+    <section class="panel"><div class="panel-title"><span>♡ Profile card</span><span>✧</span></div><div class="panel-content profile-card"><div class="avatar">🌷</div><b>Varnicka</b><small>friend-shaped legend</small><p class="muted" style="font-size:10px">One of one. No duplicates.</p><span class="stamp">FRIENDSHIP VERIFIED</span></div></section>
+    <section class="panel"><div class="panel-title"><span>♡ Current status</span></div><div class="panel-content"><div class="badges"><span>✿ main character</span><span>♡ iconic</span><span>✧ limited edition</span><span>☁ good vibes</span></div></div></section>
+   </aside>
+
+   <main class="column">
+    <section class="panel welcome">
+     <div class="panel-title"><span>☁ Welcome!</span><span class="dots">− □ ×</span></div>
+     <div class="welcome-body"><div class="welcome-inner">
+      <div class="welcome-ribbon">WELCOME TO KITTY'S OS!</div>
+      <p>Hey there! Welcome to this tiny corner of the internet. Think of it as a little pastel desktop you can click around, explore and mess with. There are little windows to open, things to explore and a few details hidden around the place.</p>
+      <p>Nothing too serious. Just a fun little project made with HTML, CSS, JavaScript and an unreasonable amount of pink.</p>
+      <span class="welcome-mascot">🐰🎀</span>
+      <p style="font-weight:bold;color:#c16f9c">♡ have a look around! ♡</p>
+     </div></div>
+    </section>
+    <div class="mini-row">
+     <section class="panel mini-panel"><div class="panel-title"><span>♡ A little note</span><span>− □ ×</span></div><div class="panel-content"><b style="font-size:12px;color:#bd6d99">Internet bulletin</b><p style="font-family:Georgia;font-size:12px;line-height:1.6">This website is 100% unofficial, 0% serious and made to be explored. Have fun finding the little details. ✧</p></div></section>
+     <section class="panel mini-panel"><div class="panel-title"><span>♡ Quick launch</span><span>− □ ×</span></div><div class="panel-content"><div class="badges"><button class="ui-btn" data-app="moodboard">🎨 Moodboard</button><button class="ui-btn" data-app="notepad">📝 Notes</button></div></div></section>
+    </div>
+    <section class="panel"><div class="panel-title"><span>♡ Tiny updates</span><span>LIVE FEED</span></div><div class="panel-content">
+     <div class="update"><span class="ico">🖥️</span><div><b>Kitty's OS</b> desktop is now online.<br><small>Just now · system</small></div></div>
+     <div class="update"><span class="ico">🎀</span><div><b>Theme update:</b> maximum pinkness achieved.<br><small>Today · design department</small></div></div>
+     <div class="update"><span class="ico">✨</span><div><b>New discovery:</b> there may be a few hidden interactions.<br><small>Whenever · the internet</small></div></div>
+    </div></section>
+   </main>
+
+   <aside class="column rightcol">
+    <section class="panel"><div class="panel-title"><span>♡ Updates</span><span class="dots">− □ ×</span></div><div class="panel-content">
+     <div class="update"><span class="ico">📝</span><div><b>[NEW]</b> The desktop is open for exploration.</div></div>
+     <div class="update"><span class="ico">🎮</span><div><b>[FUN]</b> A few new desktop corners are ready to explore.</div></div>
+     <div class="update"><span class="ico">🌸</span><div><b>[THEME]</b> Pink mode: permanently on.</div></div>
+    </div></section>
+    <section class="panel"><div class="panel-title"><span>♡ Clique corner</span><span>✧</span></div><div class="panel-content"><div class="badges"><span>♡ bestie energy</span><span>✿ soft vibes</span><span>☆ certified cool</span><span>🎀 pink-coded</span><span>☁ daydreamer</span><span>✧ iconic</span></div><p class="muted" style="text-align:center;font-size:10px;margin:10px 0 0">this desktop is cute, apparently.</p></div></section>
+    <section class="panel"><div class="panel-title"><span>♡ Webrings</span><span>− □ ×</span></div><div class="panel-content" style="text-align:center"><div style="font-size:27px">🌐 💗 🌐</div><b style="font-size:11px;color:#bf76a0">THE FRIENDSHIP INTERNET</b><p class="muted" style="font-size:10px">A very exclusive imaginary club.</p></div></section>
+    <section class="panel"><div class="panel-title"><span>♡ Visitor counter</span><span>✧</span></div><div class="panel-content" style="text-align:center"><div id="visitorCount" style="font:bold 24px monospace;color:#c26d9d">000001</div><small class="muted">you are visitor number: probably 1</small></div></section>
+   </aside>
+  </div>
+  <footer>© 2026 Kitty's OS · made with HTML, CSS, JavaScript & friendship ♡</footer>
+ </div>
+</div>
+
+<!-- App windows -->
+<section class="window" id="win-about"><div class="win-title"><span>🌷 About Varnicka.exe</span><div class="win-controls"><button class="min">−</button><button class="max">□</button><button class="x">×</button></div></div><div class="win-body"><h2>About Varnicka ♡</h2><p>A playful, unofficial profile page for a friend. Not a biography, just a tiny digital introduction.</p><div class="app-grid"><div class="app-card"><strong>Display name</strong>Varnicka</div><div class="app-card"><strong>Edition</strong>One of one</div><div class="app-card"><strong>Role</strong>Friend-shaped legend</div><div class="app-card"><strong>Rarity</strong>Unrepeatable</div></div><p>Everything here is intentionally lighthearted. The best details to add are kind inside jokes and things she'd actually enjoy seeing.</p></div></section>
+
+<section class="window" id="win-moodboard"><div class="win-title"><span>🎨 Moodboard.exe</span><div class="win-controls"><button class="min">−</button><button class="max">□</button><button class="x">×</button></div></div><div class="win-body"><h2>Today's moodboard</h2><p>Pastel pixels, soft skies and a little bit of internet nostalgia.</p><div class="app-grid"><div class="app-card" style="background:#ffe2ef">🌸<strong>Sakura pink</strong><small>soft & sweet</small></div><div class="app-card" style="background:#e9ddff">☁<strong>Lavender clouds</strong><small>dreamy hours</small></div><div class="app-card" style="background:#fff0c9">🎀<strong>Ribbon energy</strong><small>tiny details</small></div><div class="app-card" style="background:#dff4ef">🧸<strong>Cozy corner</strong><small>calm mode</small></div></div><p class="muted">Moodboard tiles are decorative and don't represent anyone's private preferences.</p></div></section>
+
+<section class="window" id="win-gallery"><div class="win-title"><span>🖼️ Gallery.exe</span><div class="win-controls"><button class="min">−</button><button class="max">□</button><button class="x">×</button></div></div><div class="win-body"><h2>The tiny gallery</h2><p>Little visual placeholders for the aesthetic. You can replace these with images you have permission to share.</p><div class="app-grid"><div class="app-card" style="font-size:42px;text-align:center">🌷<strong>Flower file</strong></div><div class="app-card" style="font-size:42px;text-align:center">🌙<strong>Moon file</strong></div><div class="app-card" style="font-size:42px;text-align:center">🧸<strong>Cozy file</strong></div><div class="app-card" style="font-size:42px;text-align:center">🎀<strong>Ribbon file</strong></div></div></div></section>
+
+<section class="window" id="win-lore"><div class="win-title"><span>📚 Lore Archive</span><div class="win-controls"><button class="min">−</button><button class="max">□</button><button class="x">×</button></div></div><div class="win-body"><h2>The Lore Archive</h2><p>Some moments deserve a footnote. These are fictional placeholders until you add friendly, shareable inside jokes.</p><div class="app-card"><strong>File 001 · Origin story</strong>The lore begins. Nobody knows how. Everybody accepts it.</div><div class="app-card" style="margin-top:8px"><strong>File 002 · Plot twist</strong>An ordinary day becomes a story worth retelling.</div><div class="app-card" style="margin-top:8px"><strong>File 003 · Current chapter</strong>Website launched. Internet historians are investigating.</div></div></section>
+
+<section class="window" id="win-awards"><div class="win-title"><span>🏅 Achievements</span><div class="win-controls"><button class="min">−</button><button class="max">□</button><button class="x">×</button></div></div><div class="win-body"><h2>Unofficial awards</h2><div class="app-card">🏆 <strong>Certified Main Character</strong>For simply showing up.</div><div class="app-card" style="margin-top:8px">🌷 <strong>Limited Edition Human</strong>One copy exists. No restock.</div><div class="app-card" style="margin-top:8px">✨ <strong>Plot Development Specialist</strong>For keeping the story moving.</div><div class="app-card" style="margin-top:8px">🎀 <strong>Best Desktop Cameo</strong>For inspiring an entire fake OS.</div></div></section>
+
+
+
+<section class="window" id="win-guestbook"><div class="win-title"><span>💌 Guestbook</span><div class="win-controls"><button class="min">−</button><button class="max">□</button><button class="x">×</button></div></div><div class="win-body"><h2>Sign the guestbook</h2><p>Leave a tiny message on this device. Entries stay in this browser only.</p><input id="guestName" placeholder="Your nickname"><textarea id="guestMessage" placeholder="Write something nice..." style="min-height:75px;margin-top:8px"></textarea><button class="ui-btn primary" id="signGuest" style="margin-top:8px">Sign guestbook</button><div id="guestEntries" style="margin-top:12px"></div></div></section>
+
+<section class="window" id="win-notepad"><div class="win-title"><span>📝 Notepad — notes.txt</span><div class="win-controls"><button class="min">−</button><button class="max">□</button><button class="x">×</button></div></div><div class="win-body"><h2>Notepad</h2><p>Autosaves locally in this browser.</p><textarea id="notes" placeholder="Type a thought, reminder or very important potato fact..."></textarea><small id="saveStatus">Ready · autosave on</small></div></section>
+
+<section class="window" id="win-settings"><div class="win-title"><span>⚙️ Settings</span><div class="win-controls"><button class="min">−</button><button class="max">□</button><button class="x">×</button></div></div><div class="win-body"><h2>Desktop settings</h2><p>Choose your desktop personality.</p><button class="ui-btn" id="darkToggle">Toggle night mode</button><p class="muted">Kitty's OS · browser desktop simulation · no system settings are changed.</p></div></section>
+
+<div class="startmenu" id="startMenu"><h3>♡ Kitty's OS</h3><div class="launch-grid">
+ <button data-app="about"><span>🌷</span>About</button><button data-app="moodboard"><span>🎨</span>Moodboard</button><button data-app="gallery"><span>🖼️</span>Gallery</button><button data-app="lore"><span>📚</span>Lore</button><button data-app="awards"><span>🏅</span>Awards</button><button data-app="guestbook"><span>💌</span>Guestbook</button><button data-app="notepad"><span>📝</span>Notepad</button><button data-app="settings"><span>⚙️</span>Settings</button>
+</div></div>
+<div class="quickmenu" id="quickMenu"><b style="color:#bf6f9c">Quick settings</b><p class="muted" style="font-size:11px">A few desktop shortcuts.</p><button class="ui-btn" data-app="settings">⚙ Settings</button> <button class="ui-btn" data-app="notepad">📝 Notes</button></div>
+<div class="toast" id="toast"></div>
+<div class="taskbar"><button class="start" id="startBtn">✿ START</button><div class="taskapps" id="taskApps"></div><div class="task-right"><div id="taskDate"></div><b id="clock">--:--</b><button class="ui-btn" id="quickBtn" style="padding:4px 7px">⌃</button></div></div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let z=30,opened=new Set(),clicks=0;
+const labels={about:"🌷 About",moodboard:"🎨 Moodboard",gallery:"🖼️ Gallery",lore:"📚 Lore",awards:"🏅 Awards",guestbook:"💌 Guestbook",notepad:"📝 Notepad",settings:"⚙ Settings"};
+function toast(m){let t=$("#toast");t.textContent=m;t.classList.add("show");clearTimeout(window.tt);window.tt=setTimeout(()=>t.classList.remove("show"),2000)}
+function taskbar(){let box=$("#taskApps");box.innerHTML="";opened.forEach(id=>{let w=$("#win-"+id);if(!w)return;let b=document.createElement("button");b.className="taskapp"+(w.classList.contains("open")?" active":"");b.textContent=labels[id];b.onclick=()=>w.classList.contains("open")?minimize(id):openApp(id);box.appendChild(b)})}
+function openApp(id){let w=$("#win-"+id);if(!w)return;$("#startMenu").classList.remove("show");$("#quickMenu").classList.remove("show");w.classList.add("open");w.classList.remove("minimized");w.style.zIndex=++z;opened.add(id);taskbar();if(id==="notepad")$("#notes").value=localStorage.getItem("varnicka-note")||"";if(id==="guestbook")renderGuests()}
+function closeApp(id){let w=$("#win-"+id);w.classList.remove("open","max","minimized");opened.delete(id);taskbar()}
+function minimize(id){let w=$("#win-"+id);w.classList.remove("open");w.classList.add("minimized");taskbar()}
+$$("[data-app]").forEach(b=>b.addEventListener("click",()=>openApp(b.dataset.app)));
+$$(".window").forEach(w=>{let id=w.id.replace("win-","");w.addEventListener("pointerdown",()=>w.style.zIndex=++z);w.querySelector(".x").onclick=()=>closeApp(id);w.querySelector(".min").onclick=()=>minimize(id);w.querySelector(".max").onclick=()=>{w.classList.toggle("max");if(!w.classList.contains("max")){w.style.left="50%";w.style.top="50%";w.style.transform="translate(-50%,-50%)"}};let bar=w.querySelector(".win-title"),drag=null;bar.addEventListener("pointerdown",e=>{if(e.target.closest("button")||w.classList.contains("max"))return;let r=w.getBoundingClientRect();drag={x:e.clientX-r.left,y:e.clientY-r.top};bar.setPointerCapture(e.pointerId)});bar.addEventListener("pointermove",e=>{if(!drag)return;w.style.left=Math.max(0,Math.min(innerWidth-w.offsetWidth,e.clientX-drag.x))+"px";w.style.top=Math.max(0,Math.min(innerHeight-w.offsetHeight-55,e.clientY-drag.y))+"px";w.style.transform="none"});bar.addEventListener("pointerup",()=>drag=null);bar.addEventListener("pointercancel",()=>drag=null)});
+$("#startBtn").onclick=()=>{$("#startMenu").classList.toggle("show");$("#quickMenu").classList.remove("show")};$("#quickBtn").onclick=()=>{$("#quickMenu").classList.toggle("show");$("#startMenu").classList.remove("show")};
+document.addEventListener("click",e=>{if(!e.target.closest("#startMenu,#startBtn"))$("#startMenu").classList.remove("show");if(!e.target.closest("#quickMenu,#quickBtn"))$("#quickMenu").classList.remove("show")});
+const qs=[["Would you rather explore space or the ocean?","🚀 Space","🐠 Ocean"],["Pick a perfect afternoon:","📚 Bookshop","🎡 Amusement park"],["Choose a tiny sidekick:","🐉 Mini dragon","🧚 Tiny fairy"],["Choose a magical power:","✨ Teleportation","🫥 Invisibility"]];
+let qi=0;function showQ(){$("#quizQuestion").textContent=qs[qi][0];$("#choiceA").textContent=qs[qi][1];$("#choiceB").textContent=qs[qi][2];$("#quizResult").textContent="Choose wisely. The imaginary committee is watching."}$("#choiceA").onclick=()=>$("#quizResult").textContent="Excellent choice. Your answer has been filed.";$("#choiceB").onclick=()=>$("#quizResult").textContent="A respectable decision. The committee approves.";$("#nextQuestion").onclick=()=>{qi=(qi+1)%qs.length;showQ()};
+$("#notes").addEventListener("input",()=>{localStorage.setItem("varnicka-note",$("#notes").value);$("#saveStatus").textContent="Saved locally · "+new Date().toLocaleTimeString()});
+function renderGuests(){let arr=JSON.parse(localStorage.getItem("varnicka-guests")||"[]");$("#guestEntries").innerHTML=arr.map(x=>`<div class="app-card" style="margin-top:7px"><b>${escapeHTML(x.name)}</b><p>${escapeHTML(x.msg)}</p></div>`).join("")||'<p class="muted">No notes yet. Be the first!</p>'}
+function escapeHTML(s){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+$("#signGuest").onclick=()=>{let name=$("#guestName").value.trim(),msg=$("#guestMessage").value.trim();if(!name||!msg){toast("Add a nickname and a message first.");return}let arr=JSON.parse(localStorage.getItem("varnicka-guests")||"[]");arr.unshift({name,msg});localStorage.setItem("varnicka-guests",JSON.stringify(arr.slice(0,20)));$("#guestName").value="";$("#guestMessage").value="";renderGuests();toast("Guestbook signed ♡")};
+$("#darkToggle").onclick=()=>{document.body.classList.toggle("night");document.body.style.filter=document.body.classList.contains("night")?"brightness(.72) saturate(.85)":"";toast("Desktop atmosphere updated")};
+function tick(){let d=new Date();$("#clock").textContent=d.toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"});$("#taskDate").textContent=d.toLocaleDateString([],{month:"short",day:"numeric"});$("#dateLine").textContent=d.toLocaleDateString([],{weekday:"short",month:"short",day:"numeric"});}tick();setInterval(tick,15000);
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){$("#startMenu").classList.remove("show");$("#quickMenu").classList.remove("show")}if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==="space"){$("#startMenu").classList.toggle("show")}});
+setTimeout(()=>toast("Welcome to Kitty's OS ♡"),700);
+</script>
+</body>
+</html>
